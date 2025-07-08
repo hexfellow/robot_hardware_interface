@@ -1,0 +1,32 @@
+<!--#######################################-->
+<!-- Copyright (c) 2025  Hexfellow.     -->
+<!-- All rights reserved.                  -->
+<!-- Author: Jecjune <jecjune@qq.com> -->
+<!-- Date  : 2025-07-08                    -->
+<!--#######################################-->
+
+<launch>
+    <!-- arg -->
+    <arg name="rate_ros" default="300" />
+    <arg name="rate_state" default="200" />
+    <arg name="frame_id" default="base_link" />
+    <arg name="simple_mode" default="true" />
+    <arg name="ws_url" default="ws://127.0.0.1:8439" />
+
+    <!-- parameter -->
+    <node name="hex_chassis" pkg="robot_hardware_interface" type="chassis_trans.py" output="screen" >
+        <!-- parameter -->
+        <param name="rate_ros" value="$(arg rate_ros)" />
+        <param name="rate_state" value="$(arg rate_state)" />
+        <param name="frame_id" value="$(arg frame_id)" />
+        <param name="simple_mode" value="$(arg simple_mode)" />
+        <param name="ws_url" value="$(arg ws_url)" />
+        
+        <!-- subscribe -->
+        <remap from="/motor_states" to="/motor_states" />
+        <remap from="/real_vel" to="/real_vel" />
+        <!-- publish -->
+        <remap from="/joint_ctrl" to="/joint_ctrl" />
+        <remap from="/cmd_vel" to="/cmd_vel" />
+    </node>
+</launch>
