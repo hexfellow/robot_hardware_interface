@@ -31,12 +31,15 @@ class ChassisTrans:
         self.__api = VehicleAPI(ws_url = url, control_hz = self.__rate_param["state"], control_mode = "speed")
         self.__velocity_interface = self.__api.vehicle
 
+        # Reset odom
+        self.__velocity_interface.reset_vehicle_position()
+
     def work(self):
         assert self.__velocity_interface is not None, "Velocity interface not initialized"
         try:
             motor_cnt = self.__velocity_interface.get_motor_cnt()
             cmd_vel = [0.0] * motor_cnt
-            cmd_x = 0.1
+            cmd_x = 0.0
             cmd_y = 0.0
             cmd_yaw = 0.0
 
@@ -47,10 +50,12 @@ class ChassisTrans:
                     vel = self.__velocity_interface.get_motor_velocity()
                     eff = self.__velocity_interface.get_motor_torque()
                     x, y, yaw = self.__velocity_interface.get_vehicle_speed()
+                    pos_x, pos_y, pos_yaw = self.__velocity_interface.get_vehicle_position()
 
                     # pub data
                     self.__data_interface.pub_motor_state(pos, vel, eff)
                     self.__data_interface.pub_real_vel(x, y, yaw)
+                    self.__data_interface.pub_odom(pos_x, pos_y, pos_yaw, x, y, yaw)
 
                 error = self.__velocity_interface.get_motor_error()
                 if error is not None and any(motor_error for motor_error in error):
@@ -61,7 +66,6 @@ class ChassisTrans:
                     # simple control
                     if self.__data_interface.has_cmd_vel():
                         cmd_x, cmd_y, cmd_yaw = self.__data_interface.get_cmd_vel()
-                        print("cmd_x: ", cmd_x, "cmd_y: ", cmd_y, "cmd_yaw: ", cmd_yaw)
                     self.__velocity_interface.set_target_vehicle_speed(cmd_x, cmd_y, cmd_yaw)
 
                 else:

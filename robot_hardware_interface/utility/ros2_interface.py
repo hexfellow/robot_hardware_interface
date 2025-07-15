@@ -15,6 +15,7 @@ import rclpy
 import rclpy.node
 from geometry_msgs.msg import TwistStamped
 from sensor_msgs.msg import JointState
+from nav_msgs.msg import Odometry
 
 from .interface_base import InterfaceBase
 
@@ -55,6 +56,11 @@ class DataInterface(InterfaceBase):
         self.__real_vel_pub = self.__node.create_publisher(
             TwistStamped,
             'real_vel',
+            10,
+        )
+        self.__odom_pub = self.__node.create_publisher(
+            Odometry,
+            'odom',
             10,
         )
 
@@ -129,6 +135,26 @@ class DataInterface(InterfaceBase):
         msg.twist.linear.y = y
         msg.twist.angular.z = yaw
         self.__real_vel_pub.publish(msg)
+    
+    def pub_odom(self, pos_x: float, pos_y: float, pos_yaw: float, linear_x: float, linear_y: float, angular_z: float):
+        out = Odometry()
+        now = self.__node.get_clock().now()
+        out.header.stamp = now.to_msg()
+        out.header.frame_id = "odom"
+        out.child_frame_id = self.__frame_id
+        out.pose.pose.position.x = pos_x
+        out.pose.pose.position.y = pos_y
+        out.pose.pose.position.z = 0.0
+        qz = np.sin(pos_yaw / 2.0)
+        qw = np.cos(pos_yaw / 2.0)
+        out.pose.pose.orientation.x = 0.0
+        out.pose.pose.orientation.y = 0.0
+        out.pose.pose.orientation.z = qz
+        out.pose.pose.orientation.w = qw
+        out.twist.twist.linear.x = linear_x
+        out.twist.twist.linear.y = linear_y
+        out.twist.twist.angular.z = angular_z
+        self.__odom_pub.publish(out)
 
     def __joint_ctrl_callback(self, msg: JointState):
         self._joint_ctrl_queue.put(msg)
