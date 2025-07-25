@@ -13,7 +13,7 @@ import numpy as np
 import rospy
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import JointState
-from geometry_msgs.msg import TwistStamped
+from geometry_msgs.msg import TwistStamped, Twist
 from nav_msgs.msg import Odometry
 
 from .interface_base import InterfaceBase
@@ -57,7 +57,7 @@ class DataInterface(InterfaceBase):
         if self.__simple_mode:
             self.__cmd_vel_sub = rospy.Subscriber(
             'cmd_vel',
-            TwistStamped,
+            Twist,
             self.__cmd_vel_callback,
             )
             self.__cmd_vel_sub
@@ -136,7 +136,7 @@ class DataInterface(InterfaceBase):
     def __joint_ctrl_callback(self, msg: JointState):
         self._joint_ctrl_queue.put(msg)
 
-    def __cmd_vel_callback(self, msg: TwistStamped):
+    def __cmd_vel_callback(self, msg: Twist):
         self._cmd_vel_queue.put(msg)
 
     def get_ws_url(self) -> str:
@@ -155,7 +155,7 @@ class DataInterface(InterfaceBase):
         '''
         with self._cmd_vel_lock:
             cmd =  self._cmd_vel_queue.get()
-        return cmd.twist.linear.x, cmd.twist.linear.y, cmd.twist.angular.z
+        return cmd.linear.x, cmd.linear.y, cmd.angular.z
 
     def has_joint_ctrl(self):
         '''

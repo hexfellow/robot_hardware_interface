@@ -13,7 +13,7 @@ import numpy as np
 
 import rclpy
 import rclpy.node
-from geometry_msgs.msg import TwistStamped
+from geometry_msgs.msg import TwistStamped, Twist
 from sensor_msgs.msg import JointState
 from nav_msgs.msg import Odometry
 
@@ -72,7 +72,7 @@ class DataInterface(InterfaceBase):
             10,
         )
         self.__cmd_vel_sub = self.__node.create_subscription(
-            TwistStamped,
+            Twist,
             'cmd_vel',
             self.__cmd_vel_callback,
             10,
@@ -159,7 +159,7 @@ class DataInterface(InterfaceBase):
     def __joint_ctrl_callback(self, msg: JointState):
         self._joint_ctrl_queue.put(msg)
 
-    def __cmd_vel_callback(self, msg: TwistStamped):
+    def __cmd_vel_callback(self, msg: Twist):
         with self._cmd_vel_lock:
             self._cmd_vel_queue.put(msg)
 
@@ -179,7 +179,7 @@ class DataInterface(InterfaceBase):
         '''
         with self._cmd_vel_lock:
             cmd =  self._cmd_vel_queue.get()
-        return cmd.twist.linear.x, cmd.twist.linear.y, cmd.twist.angular.z
+        return cmd.linear.x, cmd.linear.y, cmd.angular.z
 
     def has_joint_ctrl(self):
         '''
