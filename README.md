@@ -117,6 +117,14 @@ ros2 run robot_hardware_interface chassis_key_control
 | `stamped` | `bool` | `false` | Use TwistStamped messages if true |
 | `frame_id` | `string` | `''` | Frame ID for stamped messages |
 
+Quickly setting example:
+```bash
+rosrun robot_hardware_interface chassis_key_control.py _speed:=0.9 _turn:=0.8
+```
+```bash
+ros2 run robot_hardware_interface chassis_key_control --ros-args -p repeat_rate:=1.0
+```
+
 #### Keyboard Controls
 **Movement Keys:**
 | Key | Action | Description |

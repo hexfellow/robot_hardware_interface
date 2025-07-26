@@ -100,7 +100,7 @@ CTRL-C to quit
         self.__node.declare_parameter('speed_limit', 4.0)
         self.__node.declare_parameter('turn_limit', 1000.0)
         self.__node.declare_parameter('repeat_rate', 100.0)
-        self.__node.declare_parameter('key_timeout', 0.2)
+        self.__node.declare_parameter('key_timeout', 0.5)
         self.__node.declare_parameter('stamped', False)
         self.__node.declare_parameter('frame_id', '')
 

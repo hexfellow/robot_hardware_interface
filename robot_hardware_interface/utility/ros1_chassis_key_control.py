@@ -95,7 +95,7 @@ CTRL-C to quit
         self.__speed_limit = rospy.get_param("~speed_limit", 4.0)
         self.__turn_limit = rospy.get_param("~turn_limit", 1000.0)
         self.__repeat_rate = rospy.get_param("~repeat_rate", 100.0)
-        self.__key_timeout = rospy.get_param("~key_timeout", 0.2)
+        self.__key_timeout = rospy.get_param("~key_timeout", 0.5)
         self.__stamped = rospy.get_param("~stamped", False)
         self.__frame_id = rospy.get_param("~frame_id", '')
 
