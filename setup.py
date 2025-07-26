@@ -32,13 +32,14 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='root',
-    maintainer_email='847235539@qq.com',
+    maintainer='jecjune',
+    maintainer_email='jecjune@qq.com',
     description='TODO: Package description',
     license='TODO: License declaration',
     entry_points={
         'console_scripts': [
             "chassis_trans = robot_hardware_interface.chassis_trans:main",
+            "chassis_key_control = robot_hardware_interface.chassis_key_control:main",
         ],
     },
 )
