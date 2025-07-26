@@ -66,14 +66,13 @@ class ChassisTrans:
                     # simple control
                     if self.__data_interface.has_cmd_vel():
                         cmd_x, cmd_y, cmd_yaw = self.__data_interface.get_cmd_vel()
-                    self.__velocity_interface.set_target_vehicle_speed(cmd_x, cmd_y, cmd_yaw)
+                        self.__velocity_interface.set_target_vehicle_speed(cmd_x, cmd_y, cmd_yaw)
 
                 else:
                     # complex control
                     if self.__data_interface.has_joint_ctrl():
-                        cmd_vel = self.__data_interface.get_joint_ctrl("velocity")
-                        print("cmd_vel: ", cmd_vel)
-                    self.__velocity_interface.set_motor_velocity(cmd_vel)
+                        motor_vel = self.__data_interface.get_joint_ctrl("velocity")
+                        self.__velocity_interface.set_motor_velocity(motor_vel)
 
                 # sleep
                 self.__data_interface.sleep()
